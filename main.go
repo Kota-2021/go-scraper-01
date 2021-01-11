@@ -25,7 +25,8 @@ func getListing(listingURL string) []string {
 	request.Header.Set("cache-control", "no-cache")
 	request.Header.Set("dnt", "1")
 	request.Header.Set("upgrade-insecure-requests", "1")
-	request.Header.Set("referer", "https://www.yelp.com/")
+	//request.Header.Set("referer", "https://www.yelp.com/")
+	request.Header.Set("referer", "https://www.google.com/")
 	resp, err := client.Do(request)
 
 	if resp.StatusCode == 200 {
@@ -33,22 +34,32 @@ func getListing(listingURL string) []string {
 		if err != nil {
 			fmt.Println(err)
 		}
-		doc.Find(".lemon--ul__373c0__1_cxs a").Each(func(i int, s *goquery.Selection) {
+		fmt.Println("doc: ", doc)
+		//doc.Find(".lemon--ul__373c0__1_cxs a").Each(func(i int, s *goquery.Selection) {
+		doc.Find("div.rc div a").Each(func(i int, s *goquery.Selection) {
 			link, _ := s.Attr("href")
-			link = "https://yelp.com/" + link
+			//link = "https://yelp.com/" + link
+			link = "https://www.google.com/" + link
+			fmt.Println("link", link)
 
 			// Make sure you we only fetch correct URL with corresponding title
-			if strings.Contains(link, "biz/") {
+			//if strings.Contains(link, "biz/") {
+			if strings.Contains(link, "") {
 				text := s.Text()
+				//fmt.Println("text: ", text)
 				if text != "" && text != "more" { //to avoid unecessary links
 					links = append(links, link)
 				}
 			}
 		})
+		tmp := doc.Find("h3")
+		fmt.Println("doc-text: ", tmp.Text())
 	}
 	return links
 }
 func main() {
-	m := getListing("https://www.yelp.com/search?cflt=mobilephonerepair&find_loc=San+Francisco%2C+CA")
+	//m := getListing("https://www.yelp.com/search?cflt=mobilephonerepair&find_loc=San+Francisco%2C+CA")
+	m := getListing("https://www.google.com/search?q=golang")
 	fmt.Println(strings.Join(m, "\n"))
+	fmt.Println("finished")
 }
