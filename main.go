@@ -21,5 +21,5 @@ func getListing(listingURL string) {
 	}
 }
 func main() {
-	getListing("http://adnansiddiqi.me")
+	getListing("https://kotanote.com/profile-details/")
 }
