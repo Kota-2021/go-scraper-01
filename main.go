@@ -8,13 +8,24 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// Gdata saves the URL and text retrieved by scraping.
 type Gdata struct {
-	url  string
+
+	// url saves the URL retrieved by scraping.
+	url string
+
+	// cont saves the text retrieved by scraping.
 	cont string
 }
 
+// getListing does scraping from listingURL.
+// Width returns the value of the URL and text.
 func getListing(listingURL string, refererURL string) ([]Gdata, int) {
+
+	// getdata saves the value retrieved by scraping as  Gdata structure.
 	var getdata []Gdata
+
+	// count save the number of acquisitions retrieved by scraping.
 	var count int
 
 	//HTTP client with timeout
@@ -40,7 +51,7 @@ func getListing(listingURL string, refererURL string) ([]Gdata, int) {
 		fmt.Println(err)
 	}
 
-	// 200 is success
+	// 200 is success status
 	if resp.StatusCode == 200 {
 		//get body data
 		doc, err := goquery.NewDocumentFromReader(resp.Body)
@@ -70,6 +81,8 @@ func main() {
 
 	fmt.Println("started")
 
+	// This code will scrape from this url site
+	// referrer is the site of the site before it came url site.
 	set := map[string]string{
 		"url":     "https://www.sitepoint.com/community/",
 		"referer": "https://www.sitepoint.com/",
